@@ -10,11 +10,19 @@ namespace EF6CodeFirst
     {
         static void Main(string[] args)
         {
-            using (var entity = new Model())
+            using (var entity = new ModelContext())
             {
-                Pessoa person = new Pessoa() { Name = "Adriano La Selva", Email = "adrianolaselva123@gmail.com" };
 
-                person = entity.Pessoa.Add(person);
+                entity.Profile.Include("Perfil").Where(p => p.Id == 1).First();
+
+                var perfil = entity.Profile.Find(1);
+
+                var person = new Person() { Name = "Adriano La Selva", Email = "adrianolaselva123@gmail.com", LastName = "Moreira La Selva", Perfil = perfil };
+
+                person = entity.People.Add(person);
+
+                entity.PersonLog.Add(new PersonLog { DateTime = DateTime.Now, Person = person });
+                //person.PersonLogs.Add(new PersonLog { DateTime = DateTime.Now });
 
                 Console.WriteLine(person.Id);
 
